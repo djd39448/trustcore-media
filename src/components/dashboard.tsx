@@ -29,11 +29,7 @@ export function Dashboard({ items }: { items: FeedItem[] }) {
       {/* Top Stories Section */}
       {filter === "all" && !search && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <TopStoriesColumn
-            title="Crypto"
-            accent="crypto"
-            items={topCrypto}
-          />
+          <TopStoriesColumn title="Crypto" accent="crypto" items={topCrypto} />
           <TopStoriesColumn title="AI & Tech" accent="ai" items={topAI} />
         </div>
       )}
@@ -76,7 +72,7 @@ export function Dashboard({ items }: { items: FeedItem[] }) {
         />
       </div>
 
-      {/* Full Feed — grouped by source */}
+      {/* Full Feed */}
       <div className="space-y-1">
         {filtered.length === 0 && (
           <p className="text-muted text-sm py-12 text-center">
@@ -108,12 +104,8 @@ function TopStoriesColumn({
     accent === "crypto" ? "bg-accent-crypto/5" : "bg-accent-ai/5";
 
   return (
-    <div
-      className={`rounded-xl border ${accentBorder} ${accentBg} p-5 space-y-4`}
-    >
-      <h2
-        className={`text-xs font-bold uppercase tracking-widest ${accentColor}`}
-      >
+    <div className={`rounded-xl border ${accentBorder} ${accentBg} p-5 space-y-4`}>
+      <h2 className={`text-xs font-bold uppercase tracking-widest ${accentColor}`}>
         {title} — Top Stories
       </h2>
       {items.map((item, i) => (
@@ -123,13 +115,7 @@ function TopStoriesColumn({
   );
 }
 
-function TopStoryCard({
-  item,
-  rank,
-}: {
-  item: FeedItem;
-  rank: number;
-}) {
+function TopStoryCard({ item, rank }: { item: FeedItem; rank: number }) {
   let timeAgo = "";
   try {
     timeAgo = formatDistanceToNow(new Date(item.pubDate), { addSuffix: true });
@@ -144,22 +130,50 @@ function TopStoryCard({
       rel="noopener noreferrer"
       className="block group"
     >
+      {/* Feature image for first story */}
+      {rank === 1 && item.image && (
+        <div className="relative w-full h-40 rounded-lg overflow-hidden mb-3 bg-card">
+          <img
+            src={item.image}
+            alt=""
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <span className="absolute bottom-2 left-2 text-[10px] font-bold uppercase tracking-widest text-white/80 bg-black/40 px-2 py-0.5 rounded">
+            {item.source}
+          </span>
+        </div>
+      )}
       <div className="flex gap-3">
-        <span className="text-2xl font-bold text-muted/30 leading-none mt-0.5 select-none">
-          {rank}
-        </span>
-        <div>
+        {rank > 1 && (
+          <span className="text-2xl font-bold text-muted/30 leading-none mt-0.5 select-none">
+            {rank}
+          </span>
+        )}
+        {/* Thumbnail for non-lead stories */}
+        {rank > 1 && item.image && (
+          <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-card">
+            <img
+              src={item.image}
+              alt=""
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold text-foreground group-hover:text-white leading-snug">
             {item.title}
           </h3>
-          {item.snippet && (
+          {(rank === 1 || item.snippet) && (
             <p className="text-xs text-muted mt-1 line-clamp-2 leading-relaxed">
               {item.snippet}
             </p>
           )}
           <p className="text-[11px] text-muted/70 mt-1.5 font-medium">
-            {item.source}
-            {timeAgo && <span> &middot; {timeAgo}</span>}
+            {rank === 1 ? "" : item.source}
+            {timeAgo && <span>{rank > 1 ? " · " : ""}{timeAgo}</span>}
           </p>
         </div>
       </div>
@@ -203,13 +217,25 @@ function FeedRow({ item }: { item: FeedItem }) {
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-4 px-3 py-2.5 rounded-lg hover:bg-card/80 transition-colors group"
+      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-card/80 transition-colors group"
     >
-      <span
-        className={`shrink-0 w-1.5 h-1.5 rounded-full ${
-          item.category === "crypto" ? "bg-accent-crypto" : "bg-accent-ai"
-        }`}
-      />
+      {/* Tiny thumbnail */}
+      {item.image ? (
+        <div className="shrink-0 w-10 h-10 rounded-md overflow-hidden bg-card">
+          <img
+            src={item.image}
+            alt=""
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      ) : (
+        <span
+          className={`shrink-0 w-1.5 h-1.5 rounded-full ml-4 mr-3 ${
+            item.category === "crypto" ? "bg-accent-crypto" : "bg-accent-ai"
+          }`}
+        />
+      )}
       <span className="flex-1 text-sm text-foreground/90 group-hover:text-white truncate font-medium">
         {item.title}
       </span>

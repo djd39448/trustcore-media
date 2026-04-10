@@ -30,4 +30,5 @@ export interface FeedItem {
   source: string;
   category: "crypto" | "ai";
   snippet: string;
+  image: string;
 }
