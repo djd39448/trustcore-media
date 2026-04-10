@@ -30,9 +30,10 @@ export function SubscribeForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-card border border-border rounded-lg p-4 text-center">
-        <p className="text-sm text-green-400 font-medium">
-          You're in! Watch for the morning brief.
+      <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-5 text-center">
+        <p className="text-sm text-green-400 font-semibold">You're in.</p>
+        <p className="text-xs text-green-400/70 mt-1">
+          Morning brief hits your inbox at 6:30 AM ET.
         </p>
       </div>
     );
@@ -41,27 +42,27 @@ export function SubscribeForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-card border border-border rounded-lg p-4"
+      className="rounded-xl border border-accent-ai/20 bg-accent-ai/5 p-5"
     >
-      <p className="text-sm font-medium text-foreground mb-2">
-        Get the daily morning brief
+      <h3 className="text-sm font-bold text-foreground">
+        Daily Morning Brief
+      </h3>
+      <p className="text-xs text-muted mt-1 leading-relaxed">
+        Top crypto & AI headlines, curated and delivered at 6:30 AM ET.
       </p>
-      <p className="text-xs text-muted mb-3">
-        Top crypto & AI headlines delivered to your inbox at 6:30 AM ET.
-      </p>
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-3">
         <input
           type="email"
           required
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 bg-background border border-border rounded-md px-3 py-1.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-1 focus:ring-accent-ai/50"
+          className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent-ai/30"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="bg-accent-ai hover:bg-accent-ai/80 text-white text-sm font-medium px-4 py-1.5 rounded-md transition-colors disabled:opacity-50"
+          className="bg-accent-ai hover:bg-accent-ai/80 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50 shrink-0"
         >
           {status === "loading" ? "..." : "Subscribe"}
         </button>
