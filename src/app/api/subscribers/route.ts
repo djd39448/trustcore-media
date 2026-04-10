@@ -1,19 +1,16 @@
 import { verifyAgentKey, unauthorized } from "@/lib/auth";
+import { addSubscriber, listSubscribers, subscriberCount } from "@/lib/subscribers";
 
 export const dynamic = "force-dynamic";
-
-// In-memory subscriber store until Supabase is wired up
-// This is intentionally simple — will be replaced with DB
-const subscribers = new Map<string, { email: string; createdAt: string }>();
 
 // GET /api/subscribers — list subscribers (agent auth required)
 export async function GET(request: Request) {
   if (!verifyAgentKey(request)) return unauthorized();
 
-  return Response.json({
-    subscribers: Array.from(subscribers.values()),
-    count: subscribers.size,
-  });
+  const subs = await listSubscribers();
+  const count = await subscriberCount();
+
+  return Response.json({ subscribers: subs, count });
 }
 
 // POST /api/subscribers — add a subscriber (public, for signup form)
@@ -26,13 +23,8 @@ export async function POST(request: Request) {
       return Response.json({ error: "Valid email required" }, { status: 400 });
     }
 
-    if (subscribers.has(email)) {
-      return Response.json({ status: "already_subscribed", email });
-    }
-
-    subscribers.set(email, { email, createdAt: new Date().toISOString() });
-
-    return Response.json({ status: "subscribed", email });
+    const result = await addSubscriber(email);
+    return Response.json(result);
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
