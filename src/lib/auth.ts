@@ -1,10 +1,9 @@
-import { AGENT_API_KEY } from "./config";
-
 export function verifyAgentKey(request: Request): boolean {
+  const key = process.env.AGENT_API_KEY || "tcm-dev-key-change-me";
   const auth = request.headers.get("authorization");
   if (!auth) return false;
   const token = auth.replace("Bearer ", "");
-  return token === AGENT_API_KEY;
+  return token === key;
 }
 
 export function unauthorized() {
