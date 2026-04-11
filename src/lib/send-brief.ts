@@ -62,26 +62,21 @@ export async function sendDailyBrief(): Promise<{
   let failed = 0;
   const errors: string[] = [];
 
-  // Send in batches of 50
-  const batchSize = 50;
-  for (let i = 0; i < subscribers.length; i += batchSize) {
-    const batch = subscribers.slice(i, i + batchSize);
-    const bcc = batch.map((s) => s.email);
-
+  // Send individually so partial failures don't block other recipients
+  for (const subscriber of subscribers) {
     const { error } = await resend.emails.send({
-        from: FROM_EMAIL,
-        to: FROM_EMAIL,
-        bcc,
-        subject,
-        html,
-        text,
-      });
-      if (error) {
-        failed += batch.length;
-        errors.push(`Batch ${i / batchSize + 1}: ${JSON.stringify(error)}`);
-      } else {
-        sent += batch.length;
-      }
+      from: FROM_EMAIL,
+      to: subscriber.email,
+      subject,
+      html,
+      text,
+    });
+    if (error) {
+      failed += 1;
+      errors.push(`${subscriber.email}: ${JSON.stringify(error)}`);
+    } else {
+      sent += 1;
+    }
   }
 
   return { sent, failed, errors };
