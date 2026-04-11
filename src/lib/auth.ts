@@ -1,5 +1,5 @@
 export function verifyAgentKey(request: Request): boolean {
-  const key = process.env.AGENT_API_KEY || "tcm-dev-key-change-me";
+  const key = (process.env.AGENT_API_KEY || "tcm-dev-key-change-me").trim();
   const auth = request.headers.get("authorization");
   if (!auth) return false;
   const token = auth.replace("Bearer ", "");
