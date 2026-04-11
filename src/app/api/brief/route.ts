@@ -43,6 +43,13 @@ export async function GET() {
 
 // POST /api/brief — trigger sending the daily brief email (agent auth required)
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  const key = process.env.AGENT_API_KEY || "tcm-dev-key-change-me";
+  console.log("[brief POST] auth header present:", !!authHeader);
+  console.log("[brief POST] auth header value:", authHeader);
+  console.log("[brief POST] expected key:", key);
+  console.log("[brief POST] env var set:", !!process.env.AGENT_API_KEY);
+
   if (!verifyAgentKey(request)) return unauthorized();
 
   const result = await sendDailyBrief();
