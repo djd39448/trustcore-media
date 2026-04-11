@@ -13,14 +13,15 @@ export const FEED_SOURCES: FeedSource[] = [
   { name: "Bitcoin Magazine", url: "https://bitcoinmagazine.com/feed", category: "crypto" },
   { name: "CryptoSlate", url: "https://cryptoslate.com/feed/", category: "crypto" },
   { name: "Blockworks", url: "https://blockworks.co/feed", category: "crypto" },
-  // AI
-  { name: "MIT Tech Review AI", url: "https://www.technologyreview.com/feed/", category: "ai" },
-  { name: "VentureBeat AI", url: "https://venturebeat.com/category/ai/feed/", category: "ai" },
-  { name: "Import AI", url: "https://importai.substack.com/feed", category: "ai" },
+  // AI — builder-focused: local LLMs, agentic frameworks, model releases, performance
   { name: "Hugging Face Blog", url: "https://huggingface.co/blog/feed.xml", category: "ai" },
-  { name: "OpenAI Blog", url: "https://openai.com/blog/rss.xml", category: "ai" },
-  { name: "The Batch (deeplearning.ai)", url: "https://www.deeplearning.ai/the-batch/feed/", category: "ai" },
-  { name: "Ars Technica AI", url: "https://arstechnica.com/ai/feed/", category: "ai" },
+  { name: "Import AI", url: "https://importai.substack.com/feed", category: "ai" },
+  { name: "Simon Willison", url: "https://simonwillison.net/atom/everything/", category: "ai" },
+  { name: "Interconnects", url: "https://www.interconnects.ai/feed", category: "ai" },
+  { name: "The Gradient", url: "https://thegradient.pub/rss/", category: "ai" },
+  { name: "Ahead of AI", url: "https://magazine.sebastianraschka.com/feed", category: "ai" },
+  { name: "LangChain Blog", url: "https://blog.langchain.dev/rss/", category: "ai" },
+  { name: "LocalLLaMA (Reddit)", url: "https://www.reddit.com/r/LocalLLaMA/.rss", category: "ai" },
 ];
 
 export interface FeedItem {
