@@ -68,20 +68,20 @@ export async function sendDailyBrief(): Promise<{
     const batch = subscribers.slice(i, i + batchSize);
     const bcc = batch.map((s) => s.email);
 
-    try {
-      await resend.emails.send({
+    const { error } = await resend.emails.send({
         from: FROM_EMAIL,
-        to: FROM_EMAIL, // send to self
+        to: FROM_EMAIL,
         bcc,
         subject,
         html,
         text,
       });
-      sent += batch.length;
-    } catch (err) {
-      failed += batch.length;
-      errors.push(`Batch ${i / batchSize + 1}: ${err}`);
-    }
+      if (error) {
+        failed += batch.length;
+        errors.push(`Batch ${i / batchSize + 1}: ${JSON.stringify(error)}`);
+      } else {
+        sent += batch.length;
+      }
   }
 
   return { sent, failed, errors };
