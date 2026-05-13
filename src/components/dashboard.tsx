@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { FeedItem } from "@/lib/feeds";
 import { formatDistanceToNow } from "date-fns";
 
@@ -156,11 +157,13 @@ function FeatureLede({ item }: { item: FeedItem }) {
     >
       {item.image && (
         <div className="relative w-full aspect-[16/9] rounded-md overflow-hidden bg-bg-elev mb-4 border border-rule">
-          <img
+          <Image
             src={item.image}
             alt=""
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-            loading="lazy"
+            fill
+            unoptimized
+            sizes="(max-width: 768px) 100vw, 560px"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
           />
         </div>
       )}
@@ -205,12 +208,14 @@ function SecondaryStory({ item }: { item: FeedItem }) {
         </p>
       </div>
       {item.image && (
-        <div className="shrink-0 w-20 h-14 rounded-md overflow-hidden bg-bg-elev border border-rule">
-          <img
+        <div className="relative shrink-0 w-20 h-14 rounded-md overflow-hidden bg-bg-elev border border-rule">
+          <Image
             src={item.image}
             alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
+            fill
+            unoptimized
+            sizes="80px"
+            className="object-cover"
           />
         </div>
       )}
