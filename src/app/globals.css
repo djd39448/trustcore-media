@@ -1,31 +1,84 @@
 @import "tailwindcss";
 
+/*
+ * TrustCore Media — editorial/magazine theme.
+ *
+ * Voice: a daily brief, calm signal not noise.
+ * Palette: warm paper-black (newsprint-at-night), single terracotta
+ * accent. Category (crypto / AI) signaled by mono kicker labels, not
+ * by accent color splashes — keeps the eye anchored on one accent so
+ * the page reads like a publication, not a dashboard.
+ */
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --card: #141414;
-  --card-hover: #1a1a1a;
-  --border: #262626;
-  --muted: #737373;
-  --accent-crypto: #f59e0b;
-  --accent-ai: #6366f1;
+  --bg: #0f0d0b;
+  --bg-elev: #171513;
+  --bg-card: #1c1916;
+  --fg: #f3efe8;
+  --fg-dim: #a6a097;
+  --fg-muted: #6f6962;
+  --rule: #2a2520;
+  --rule-strong: #3a3328;
+  --accent: #d97757;
+  --accent-soft: rgba(217, 119, 87, 0.1);
+  --accent-rule: rgba(217, 119, 87, 0.28);
+
+  /* Category kickers (used only on small uppercase mono labels). */
+  --kicker-crypto: #c9874b;
+  --kicker-ai: #8a8ac0;
+
+  /* Status (success/error) — desaturated to fit the warm palette. */
+  --good: #7ea889;
+  --warn: #b78a4d;
+  --bad: #b86a5e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
-  --color-border: var(--border);
-  --color-muted: var(--muted);
-  --color-accent-crypto: var(--accent-crypto);
-  --color-accent-ai: var(--accent-ai);
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-bg-card: var(--bg-card);
+  --color-fg: var(--fg);
+  --color-fg-dim: var(--fg-dim);
+  --color-fg-muted: var(--fg-muted);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-rule: var(--accent-rule);
+  --color-kicker-crypto: var(--kicker-crypto);
+  --color-kicker-ai: var(--kicker-ai);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-feature-settings:
+    "ss01",
+    "cv11";
+}
+
+/* Editorial serif used on lede + section headings. Optimized for
+   screen reading; Newsreader's slightly tall x-height holds up at
+   the small sizes we use it (16-32px). */
+.font-editorial {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-feature-settings: "ss01";
+}
+
+/* Kicker labels — small all-caps mono, used to flag categories and
+   section headers in the magazine voice. */
+.kicker {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  font-weight: 500;
 }

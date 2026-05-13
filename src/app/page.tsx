@@ -1,7 +1,7 @@
 import { fetchAllFeeds } from "@/lib/fetch-feeds";
 import { Dashboard } from "@/components/dashboard";
 import { SubscribeForm } from "@/components/subscribe-form";
-import { AtAGlance } from "@/components/at-a-glance";
+import { TodaysBrief } from "@/components/at-a-glance";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,85 +10,126 @@ export default async function Home() {
   const items = await fetchAllFeeds();
   const cryptoCount = items.filter((i) => i.category === "crypto").length;
   const aiCount = items.filter((i) => i.category === "ai").length;
+  const sourceCount = new Set(items.map((i) => i.source)).size;
+
+  const now = new Date();
+  const dateLong = now.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/New_York",
+  });
+  const timeShort = now.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  });
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-end justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              TrustCore<span className="text-accent-ai">Media</span>
+    <div className="flex flex-col min-h-screen bg-bg">
+      {/* Masthead */}
+      <header className="border-b border-rule-strong">
+        <div className="max-w-6xl mx-auto px-6 pt-10 pb-7">
+          <p className="kicker mb-3">A daily brief · crypto + AI</p>
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <h1 className="font-editorial text-5xl sm:text-6xl tracking-tight text-fg leading-[0.95]">
+              TrustCore <span className="italic text-accent">Media</span>
             </h1>
-            <p className="text-sm text-muted mt-0.5">
-              Crypto & AI intelligence, aggregated
-            </p>
+            <div className="text-right shrink-0">
+              <p className="kicker">{dateLong}</p>
+              <p className="kicker mt-1">
+                Edition · {items.length} items · {timeShort} ET
+              </p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-xs text-muted font-mono">
-              {items.length} headlines
-            </p>
-            <p className="text-[11px] text-muted/60">
-              {cryptoCount} crypto &middot; {aiCount} AI &middot;{" "}
-              {new Date().toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "2-digit",
-                timeZone: "America/New_York",
-              })}{" "}
-              ET
-            </p>
-          </div>
+          <p className="font-editorial italic text-fg-dim text-lg mt-5 max-w-2xl leading-snug">
+            Calm signal from the crypto and AI firehoses — hand-picked
+            from {sourceCount} sources, every morning. No commentary,
+            just what moved.
+          </p>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-8">
-        <AtAGlance items={items} />
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr_280px] gap-8">
+      {/* Main */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-10">
+        <TodaysBrief items={items} />
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-10 mt-10">
           <Dashboard items={items} />
-          <aside className="space-y-5">
+          <aside className="space-y-6">
             <SubscribeForm />
-            <div className="rounded-xl border border-border bg-card/50 p-5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-3">
-                Sources
-              </h3>
+            <SidebarPanel kicker="Sources">
               <div className="flex flex-wrap gap-1.5">
                 {Array.from(new Set(items.map((i) => i.source))).map((src) => (
                   <span
                     key={src}
-                    className="text-[11px] px-2 py-0.5 rounded-full border border-border text-muted/80"
+                    className="text-[11px] px-2 py-0.5 rounded-full border border-rule text-fg-dim"
                   >
                     {src}
                   </span>
                 ))}
               </div>
-            </div>
-            <div className="rounded-xl border border-border bg-card/50 p-5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-2">
-                For Developers
-              </h3>
-              <p className="text-xs text-muted/80 leading-relaxed">
-                JSON API available at{" "}
-                <code className="text-accent-ai text-[11px]">/api/feeds</code>,{" "}
-                <code className="text-accent-ai text-[11px]">/api/brief</code>,{" "}
-                <code className="text-accent-ai text-[11px]">/api/sources</code>
+            </SidebarPanel>
+            <SidebarPanel kicker="For developers">
+              <p className="text-xs text-fg-dim leading-relaxed">
+                Read-only JSON API at{" "}
+                <code className="text-accent text-[11px] font-mono">
+                  /api/feeds
+                </code>
+                ,{" "}
+                <code className="text-accent text-[11px] font-mono">
+                  /api/brief
+                </code>
+                ,{" "}
+                <code className="text-accent text-[11px] font-mono">
+                  /api/sources
+                </code>
+                .
               </p>
-            </div>
+            </SidebarPanel>
+            <SidebarPanel kicker="Methodology">
+              <p className="text-xs text-fg-dim leading-relaxed">
+                We pull RSS / Atom from {sourceCount} named publications
+                every page load. Headlines are unedited; ordering is
+                chronological with a category split. Nothing here is
+                investment advice.
+              </p>
+            </SidebarPanel>
           </aside>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border/50 px-6 py-5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <p className="text-[11px] text-muted/50">
-            &copy; {new Date().getFullYear()} TrustCore Systems
-          </p>
-          <p className="text-[11px] text-muted/50">
-            Updated every page load &middot; 14 sources
+      {/* Colophon */}
+      <footer className="border-t border-rule mt-12">
+        <div className="max-w-6xl mx-auto px-6 py-8 flex items-baseline justify-between flex-wrap gap-3">
+          <div>
+            <p className="font-editorial text-fg text-base">
+              TrustCore Media
+            </p>
+            <p className="kicker mt-1">
+              {cryptoCount} crypto · {aiCount} AI · {sourceCount} sources
+            </p>
+          </div>
+          <p className="kicker text-fg-muted">
+            © {now.getFullYear()} TrustCore Systems · Refreshes on load
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function SidebarPanel({
+  kicker,
+  children,
+}: {
+  kicker: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="border-t border-rule pt-4">
+      <p className="kicker mb-2">{kicker}</p>
+      {children}
     </div>
   );
 }
