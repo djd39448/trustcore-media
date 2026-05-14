@@ -101,17 +101,40 @@ export default async function Home() {
 
       {/* Colophon */}
       <footer className="border-t border-rule mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-8 flex items-baseline justify-between flex-wrap gap-3">
-          <div>
-            <p className="font-editorial text-fg text-base">
-              TrustCore Media
-            </p>
-            <p className="kicker mt-1">
-              {cryptoCount} crypto · {aiCount} AI · {sourceCount} sources
-            </p>
+        <div className="max-w-6xl mx-auto px-6 py-8 space-y-4">
+          <div className="flex items-baseline justify-between flex-wrap gap-3">
+            <div>
+              <p className="font-editorial text-fg text-base">
+                TrustCore Media
+              </p>
+              <p className="kicker mt-1">
+                {cryptoCount} crypto · {aiCount} AI · {sourceCount} sources
+              </p>
+            </div>
+            <nav className="flex items-baseline gap-4 flex-wrap">
+              <a href="/privacy" className="kicker hover:text-fg">
+                Privacy
+              </a>
+              <a
+                href="mailto:hello@trustcore.systems"
+                className="kicker hover:text-fg"
+              >
+                Contact
+              </a>
+              <a
+                href="https://50by50.dev"
+                className="kicker hover:text-fg"
+                target="_blank"
+                rel="noopener"
+              >
+                50by50 ↗
+              </a>
+            </nav>
           </div>
-          <p className="kicker text-fg-muted">
-            © {now.getFullYear()} TrustCore Systems · Refreshes on load
+          <p className="kicker text-fg-muted pt-4 border-t border-rule">
+            © {now.getFullYear()} TrustCore Systems · No affiliate links on
+            outbound headlines · Headlines belong to their publishers ·
+            Refreshes on load
           </p>
         </div>
       </footer>
